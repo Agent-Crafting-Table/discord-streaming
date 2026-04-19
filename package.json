@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "bun src/server.ts"
+    "start": "bun install --no-summary && sh -c 'while true; do bun src/server.ts; sleep 0.5; done'"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
