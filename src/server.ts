@@ -117,6 +117,11 @@ mcp.tool(
   async ({ chat_id, text }) => {
     const ch = await client.channels.fetch(chat_id) as TextChannel
 
+    // Renew typing indicator on every progress update — belt-and-suspenders
+    // alongside the 8s keepalive interval. Prevents the indicator from
+    // expiring during long gaps between tool calls.
+    ch.sendTyping().catch(() => {})
+
     const existingId = activeWorkingMsg.get(chat_id)
     if (existingId) {
       try {
