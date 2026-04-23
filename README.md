@@ -2,6 +2,7 @@
 
 Claude Code Discord MCP plugin with **Tier-2 progress streaming** — Claude narrates its work in real time without spamming your notifications.
 
+
 > Part of [The Agent Crafting Table](https://github.com/Agent-Crafting-Table) — standalone Claude Code agent components.
 
 ## How it works
