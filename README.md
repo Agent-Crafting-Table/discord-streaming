@@ -5,7 +5,60 @@ Claude Code Discord MCP plugin with **Tier-2 progress streaming** — Claude nar
 
 > Part of [The Agent Crafting Table](https://github.com/Agent-Crafting-Table) — standalone Claude Code agent components.
 
-## How it works
+## How It Works
+
+```mermaid
+sequenceDiagram
+    participant U as User (Discord)
+    participant B as Bot (MCP Plugin)
+    participant CL as Claude Code
+
+    U->>B: Send message
+    B->>CL: Forward to Claude context
+    CL->>B: post_update("🔍 Reading config file...")
+    B->>B: Create working message (or edit existing)
+    Note over B,U: Silent edit — no notification ping
+
+    CL->>B: post_update("📡 Checking SSH connection...")
+    B->>B: Edit same working message
+    Note over B,U: Silent edit — no notification ping
+
+    CL->>B: post_update("🛠️ Applying fix...")
+    B->>B: Edit same working message
+    Note over B,U: Silent edit — no notification ping
+
+    CL->>B: reply("✅ Done — updated nginx config and restarted.")
+    B->>U: NEW message posted
+    Note over B,U: Notification ping — user is alerted
+    B->>B: Clear working message reference
+```
+
+```mermaid
+graph LR
+    subgraph "MCP Tools"
+        T1["reply(chat_id, text)
+Send final answer
+pings user
+clears working message"]
+        T2["post_update(chat_id, text)
+Edit working message silently
+or create new if none exists"]
+        T3["fetch_messages(channel, limit)
+Read recent channel history"]
+    end
+
+    subgraph "vs fleet-discord"
+        SINGLE["discord-streaming
+single session
+no peer routing
+no busy-file isolation
+no stuck-task watchdog"]
+        FLEET["fleet-discord
+multi-session
+includes all of this
++ session claim routing"]
+    end
+```
 
 ```
 User message → Claude starts working
